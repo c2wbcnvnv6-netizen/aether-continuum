@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aether Continuum — Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05050A;
+    --gold: #E8C47C;
+    --gold-soft: #F5D78E;
+    --text: #F0EEF6;
+    --text-muted: #A39BB8;
+    --glass: rgba(255,255,255,0.05);
+    --glass-border: rgba(255,255,255,0.1);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+  }
+  #atmosphere { position:fixed; inset:0; z-index:0; }
+  .ui { position:relative; z-index:10; height:100vh; display:flex; flex-direction:column; }
+  
+  /* Top bar */
+  .topbar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 1.25rem 2rem; background: rgba(5,5,10,0.6); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .logo { font-family:'Syne',sans-serif; font-weight:700; font-size:1.25rem;
+    background: linear-gradient(135deg,#fff,var(--gold-soft)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .back { color:var(--text-muted); text-decoration:none; font-size:0.9rem; }
+  .back:hover { color:var(--gold); }
+  
+  /* Layer switcher */
+  .layers {
+    display:flex; gap:0.5rem; background:var(--glass); padding:0.35rem;
+    border-radius:999px; border:1px solid var(--glass-border);
+  }
+  .layer-btn {
+    padding:0.5rem 1.1rem; border-radius:999px; border:none; background:transparent;
+    color:var(--text-muted); font-size:0.85rem; font-weight:500; cursor:pointer;
+    transition:all 0.3s;
+  }
+  .layer-btn.active {
+    background: linear-gradient(135deg,var(--gold),#D4A84B); color:#1A1205;
+  }
+  
+  /* Workspace */
+  .workspace {
+    flex:1; position:relative; overflow:hidden;
+  }
+  
+  /* Component orbs */
+  .orb {
+    position:absolute; width:90px; height:90px; border-radius:50%;
+    background: var(--glass); border:1px solid var(--glass-border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.8rem; text-align:center; cursor:pointer;
+    transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+    backdrop-filter: blur(12px); user-select:none;
+  }
+  .orb:hover, .orb.focused {
+    border-color: var(--gold); box-shadow: 0 0 40px rgba(232,196,124,0.25);
+    transform: scale(1.08);
+  }
+  .orb.focused { z-index:20; }
+  
+  /* Bloom tools */
+  .tools {
+    position:absolute; pointer-events:none; opacity:0; transition:opacity 0.35s;
+  }
+  .tools.visible { opacity:1; pointer-events:auto; }
+  .tool {
+    position:absolute; width:42px; height:42px; border-radius:50%;
+    background: rgba(232,196,124,0.15); border:1px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.7rem; color:var(--gold-soft); cursor:pointer;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .tool:hover { background: rgba(232,196,124,0.3); transform: scale(1.15); }
+  
+  /* Mode overlays */
+  .mode-label {
+    position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+    font-size:0.85rem; color:var(--text-muted); letter-spacing:0.1em; text-transform:uppercase;
+    opacity:0.7;
+  }
+  
+  /* Intelligence auras etc handled by JS class on body or workspace */
+  .workspace.logic .orb { border-style: dashed; }
+  .workspace.intelligence .orb { box-shadow: 0 0 30px rgba(232,196,124,0.15); }
+  
+  .hint {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    text-align:center; color:var(--text-muted); font-size:0.95rem; max-width:320px;
+    pointer-events:none; transition:opacity 0.5s;
+  }
+  .hint.hidden { opacity:0; }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .orb, .tool, .layer-btn { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <canvas id="atmosphere"></canvas>
+  <div class="ui">
+    <div class="topbar">
+      <div class="logo">Aether Continuum</div>
+      <div class="layers" id="layers">
+        <button class="layer-btn active" data-mode="surface">Surface</button>
+        <button class="layer-btn" data-mode="interaction">Interaction</button>
+        <button class="layer-btn" data-mode="logic">Logic</button>
+        <button class="layer-btn" data-mode="intelligence">Intelligence</button>
+      </div>
+      <a href="index.html" class="back">← Marketing</a>
+    </div>
+    
+    <div class="workspace" id="workspace">
+      <div class="hint" id="hint">Click a component to focus it.<br>Tools will bloom around it.<br>Switch layers above.</div>
+      
+      <!-- Sample component orbs -->
+      <div class="orb" style="left:22%; top:28%;" data-name="Hero">Hero</div>
+      <div class="orb" style="left:55%; top:22%;" data-name="Nav">Navigation</div>
+      <div class="orb" style="left:38%; top:48%;" data-name="Card">Feature Card</div>
+      <div class="orb" style="left:68%; top:45%;" data-name="CTA">CTA Block</div>
+      <div class="orb" style="left:30%; top:68%;" data-name="Footer">Footer</div>
+      
+      <div class="tools" id="tools"></div>
+      <div class="mode-label" id="modeLabel">Surface Layer — pure visual design</div>
+    </div>
+  </div>
+
+  <script>
+    // Atmosphere (same style as landing)
+    const canvas = document.getElementById('atmosphere');
+    const ctx = canvas.getContext('2d');
+    let particles = [], w, h, mouse = {x:null,y:null};
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function resize(){ w=canvas.width=innerWidth; h=canvas.height=innerHeight; }
+    addEventListener('resize', resize); resize();
+    addEventListener('mousemove', e => { mouse.x=e.clientX; mouse.y=e.clientY; });
+    class P {
+      constructor(){this.reset();}
+      reset(){ this.x=Math.random()*w; this.y=Math.random()*h; this.vx=(Math.random()-0.5)*0.3; this.vy=(Math.random()-0.5)*0.3; this.size=Math.random()*1.6+0.4; this.a=Math.random()*0.4+0.1; }
+      update(){ if(!reduced && mouse.x){ const dx=mouse.x-this.x, dy=mouse.y-this.y, d=Math.hypot(dx,dy); if(d<200){this.vx+=dx*0.00003; this.vy+=dy*0.00003;} } this.vx*=0.99; this.vy*=0.99; this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>w||this.y<0||this.y>h) this.reset(); }
+      draw(){ ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fillStyle=`rgba(232,196,124,${this.a})`; ctx.fill(); }
+    }
+    for(let i=0;i<80;i++) particles.push(new P());
+    function loop(){ if(reduced) return; ctx.clearRect(0,0,w,h); const g=ctx.createRadialGradient(w*0.3,h*0.3,0,w*0.3,h*0.3,w*0.7); g.addColorStop(0,'rgba(26,11,46,0.35)'); g.addColorStop(1,'transparent'); ctx.fillStyle=g; ctx.fillRect(0,0,w,h); particles.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(loop); }
+    if(!reduced) loop();
+
+    // Modes
+    const modes = {
+      surface: { label: 'Surface Layer — pure visual design', tools: ['Layout','Style','Type','Image','Align'] },
+      interaction: { label: 'Interaction Layer — motion & states', tools: ['Animate','State','Trigger','Timeline','Physics'] },
+      logic: { label: 'Logic Layer — code & data', tools: ['Code','Props','Data','Event','Export'] },
+      intelligence: { label: 'Intelligence Layer — AI & insights', tools: ['Suggest','A11y','Perf','Convert','Agent'] }
+    };
+    let currentMode = 'surface';
+    let focused = null;
+
+    document.querySelectorAll('.layer-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.layer-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMode = btn.dataset.mode;
+        document.getElementById('workspace').className = 'workspace ' + currentMode;
+        document.getElementById('modeLabel').textContent = modes[currentMode].label;
+        if (focused) bloom(focused);
+      });
+    });
+
+    // Orbs
+    const orbs = document.querySelectorAll('.orb');
+    const toolsEl = document.getElementById('tools');
+    const hint = document.getElementById('hint');
+
+    function bloom(orb) {
+      focused = orb;
+      orbs.forEach(o => o.classList.remove('focused'));
+      orb.classList.add('focused');
+      hint.classList.add('hidden');
+
+      const rect = orb.getBoundingClientRect();
+      const wr = document.getElementById('workspace').getBoundingClientRect();
+      const cx = rect.left + rect.width/2 - wr.left;
+      const cy = rect.top + rect.height/2 - wr.top;
+
+      toolsEl.innerHTML = '';
+      toolsEl.classList.add('visible');
+      toolsEl.style.left = '0'; toolsEl.style.top = '0';
+
+      const toolNames = modes[currentMode].tools;
+      const radius = 110;
+      toolNames.forEach((name, i) => {
+        const angle = (i / toolNames.length) * Math.PI * 2 - Math.PI/2;
+        const x = cx + Math.cos(angle) * radius - 21;
+        const y = cy + Math.sin(angle) * radius - 21;
+        const t = document.createElement('div');
+        t.className = 'tool';
+        t.style.left = x + 'px';
+        t.style.top = y + 'px';
+        t.textContent = name.slice(0,4);
+        t.title = name;
+        toolsEl.appendChild(t);
+      });
+    }
+
+    orbs.forEach(orb => {
+      orb.addEventListener('click', e => {
+        e.stopPropagation();
+        bloom(orb);
+      });
+    });
+
+    document.getElementById('workspace').addEventListener('click', () => {
+      focused = null;
+      orbs.forEach(o => o.classList.remove('focused'));
+      toolsEl.classList.remove('visible');
+      toolsEl.innerHTML = '';
+      hint.classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
