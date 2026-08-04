@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aether — The Continuum</title>
+<meta name="description" content="Aether is the creative continuum for the modern web. Design. Code. Launch. In continuous flow.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05050A;
+    --indigo: #0F0A1F;
+    --violet: #1A0B2E;
+    --gold: #E8C47C;
+    --gold-soft: #F5D78E;
+    --text: #F0EEF6;
+    --text-muted: #A39BB8;
+    --glass: rgba(255, 255, 255, 0.04);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glow: 0 0 40px rgba(232, 196, 124, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Canvas atmosphere */
+  #atmosphere {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Layout */
+  .container {
+    width: min(1100px, 92vw);
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 6rem 0 4rem;
+    position: relative;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.5rem, 10vw, 6.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #fff 30%, var(--gold-soft));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.6rem;
+  }
+
+  .hero .tagline {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.02em;
+  }
+
+  .hero .subhead {
+    max-width: 580px;
+    font-size: 1.125rem;
+    color: var(--text-muted);
+    margin: 0 auto 2.75rem;
+    font-weight: 300;
+  }
+
+  .cta-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.95rem 2rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), #D4A84B);
+    color: #1A1205;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.1), var(--glow);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.2), 0 0 60px rgba(232, 196, 124, 0.35);
+  }
+
+  .btn-secondary {
+    background: var(--glass);
+    color: var(--text);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+  }
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  /* Sections */
+  section {
+    padding: 7rem 0;
+    position: relative;
+  }
+
+  .section-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .lead {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    max-width: 640px;
+    font-weight: 300;
+  }
+
+  /* Glass card */
+  .glass {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 1.25rem;
+    backdrop-filter: blur(20px);
+    padding: 2rem;
+    transition: all 0.4s ease;
+  }
+  .glass:hover {
+    border-color: rgba(232, 196, 124, 0.25);
+    box-shadow: 0 0 40px rgba(232, 196, 124, 0.08);
+  }
+
+  /* Capabilities */
+  .capabilities {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+  @media (min-width: 700px) {
+    .capabilities { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1000px) {
+    .capabilities { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .cap-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    margin-bottom: 0.6rem;
+    color: var(--gold-soft);
+  }
+  .cap-card p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* Flow */
+  .flow-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+    justify-content: center;
+  }
+  .flow-step {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  /* For whom */
+  .audience {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+  @media (min-width: 600px) {
+    .audience { grid-template-columns: 1fr 1fr; }
+  }
+  .audience-item {
+    padding: 1.25rem 1.5rem;
+    border-left: 2px solid var(--gold);
+    background: linear-gradient(90deg, rgba(232,196,124,0.06), transparent);
+  }
+
+  /* Final CTA */
+  .final-cta {
+    text-align: center;
+    padding: 8rem 0;
+  }
+  .final-cta h2 {
+    margin-bottom: 1rem;
+  }
+  .final-cta p {
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    font-size: 1.15rem;
+  }
+
+  /* Footer */
+  footer {
+    padding: 3rem 0 4rem;
+    text-align: center;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  /* Reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .btn-primary:hover {
+      transform: none;
+    }
+  }
+</style>
+</head>
+<body>
+  <canvas id="atmosphere"></canvas>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <h1>Aether</h1>
+      <p class="tagline">Design. Code. Launch.<br>In continuous flow.</p>
+      <p class="subhead">The creative continuum for the modern web. Where design, development, intelligence, and production exist as one living system.</p>
+      <div class="cta-group">
+        <a href="#early-access" class="btn btn-primary">Enter the Continuum</a>
+        <a href="#early-access" class="btn btn-secondary">Request Early Access</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- THE CONTINUUM -->
+  <section>
+    <div class="container reveal">
+      <div class="section-label">The Continuum</div>
+      <h2>You do not open another tool.<br>You enter a living space.</h2>
+      <p class="lead">A deep, luminous continuum where projects exist as constellations. Zoom out and see the entire system. Zoom in and work at the highest fidelity. Design, interaction, code, and intelligence occupy the same dimensional space — always in dialogue, never out of sync.</p>
+    </div>
+  </section>
+
+  <!-- CAPABILITIES -->
+  <section>
+    <div class="container">
+      <div class="section-label reveal">Capabilities</div>
+      <h2 class="reveal">Everything stays connected</h2>
+      <div class="capabilities">
+        <div class="glass cap-card reveal">
+          <h3>Continuum Canvas</h3>
+          <p>Infinite multi-dimensional workspace. Switch fluidly between pure design, motion, and production code. Everything stays in perfect dialogue.</p>
+        </div>
+        <div class="glass cap-card reveal">
+          <h3>Living Design Systems</h3>
+          <p>Tokens, components, and motion that power both the canvas and the live site simultaneously. One source of truth that never drifts.</p>
+        </div>
+        <div class="glass cap-card reveal">
+          <h3>Context-Aware AI</h3>
+          <p>AI that understands your entire project graph — design system, flows, brand, performance — and co-creates with precision.</p>
+        </div>
+        <div class="glass cap-card reveal">
+          <h3>Reality Checks</h3>
+          <p>Accessibility, performance, and conversion insights that appear as living annotations directly in the space.</p>
+        </div>
+        <div class="glass cap-card reveal">
+          <h3>Zero-Friction Launch</h3>
+          <p>From the same continuum: branch, preview, deploy to the global edge, and feed live insights back into the work.</p>
+        </div>
+        <div class="glass cap-card reveal">
+          <h3>Agent Orchestra</h3>
+          <p>Specialized AI agents (Accessibility Guardian, Conversion Strategist, Performance Weaver) that live in the project with you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLOW -->
+  <section>
+    <div class="container reveal">
+      <div class="section-label">How it feels</div>
+      <h2>From idea to living product</h2>
+      <p class="lead">Idea becomes a seed constellation. You fly into the design surface. Interactions bloom as luminous ribbons. Code appears as a translucent lattice that stays perfectly synchronized. Reality annotations float beside the work. One gesture opens the Launch Horizon. The site goes live. Insights return as living streams.</p>
+      <div class="flow-steps">
+        <span class="flow-step">Idea</span>
+        <span class="flow-step">Seed</span>
+        <span class="flow-step">Design Surface</span>
+        <span class="flow-step">Interaction Layer</span>
+        <span class="flow-step">Code Lattice</span>
+        <span class="flow-step">Reality Checks</span>
+        <span class="flow-step">Launch Horizon</span>
+        <span class="flow-step">Living Metrics</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOR WHOM -->
+  <section>
+    <div class="container">
+      <div class="section-label reveal">Built for</div>
+      <h2 class="reveal">Those who refuse to compromise</h2>
+      <div class="audience">
+        <div class="audience-item reveal">Designers who refuse to lose fidelity when the work moves to production.</div>
+        <div class="audience-item reveal">Developers who still care deeply about craft and visual excellence.</div>
+        <div class="audience-item reveal">Teams that hate handoffs and translation loss between tools.</div>
+        <div class="audience-item reveal">Makers who want the future of web creation available today.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta" id="early-access">
+    <div class="container reveal">
+      <h2>The Continuum is opening</h2>
+      <p>Request early access and help shape how the next generation of websites will be born.</p>
+      <a href="#" class="btn btn-primary">Join the Continuum</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>Aether — The creative continuum for the modern web.</p>
+      <p style="margin-top: 0.5rem; opacity: 0.6;">A product vision. Built as a living showcase of the Continuum.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Particle atmosphere with light mouse interaction + reduced-motion support
+    const canvas = document.getElementById('atmosphere');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let w, h;
+    let mouse = { x: null, y: null };
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.size = Math.random() * 1.8 + 0.4;
+        this.alpha = Math.random() * 0.4 + 0.1;
+      }
+      update() {
+        if (!prefersReducedMotion && mouse.x !== null) {
+          const dx = mouse.x - this.x;
+          const dy = mouse.y - this.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 180) {
+            this.vx += dx * 0.00003;
+            this.vy += dy * 0.00003;
+          }
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset();
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(232, 196, 124, ${this.alpha})`;
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 90; i++) particles.push(new Particle());
+
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+      // soft radial gradients
+      const g1 = ctx.createRadialGradient(w*0.2, h*0.3, 0, w*0.2, h*0.3, w*0.6);
+      g1.addColorStop(0, 'rgba(26, 11, 46, 0.4)');
+      g1.addColorStop(1, 'transparent');
+      ctx.fillStyle = g1;
+      ctx.fillRect(0, 0, w, h);
+
+      const g2 = ctx.createRadialGradient(w*0.8, h*0.7, 0, w*0.8, h*0.7, w*0.5);
+      g2.addColorStop(0, 'rgba(15, 10, 31, 0.5)');
+      g2.addColorStop(1, 'transparent');
+      ctx.fillStyle = g2;
+      ctx.fillRect(0, 0, w, h);
+
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    if (!prefersReducedMotion) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.12 });
+      reveals.forEach(el => observer.observe(el));
+    } else {
+      reveals.forEach(el => el.classList.add('visible'));
+    }
+  </script>
+</body>
+</html>
