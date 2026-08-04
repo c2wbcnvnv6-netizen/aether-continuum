@@ -5,14 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aether — The Continuum</title>
 <meta name="description" content="Aether is the creative continuum for the modern web. Design. Code. Launch. In continuous flow.">
+<meta property="og:title" content="Aether — The Continuum">
+<meta property="og:description" content="The creative continuum for the modern web. Where design, development, intelligence, and production exist as one living system.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aether — The Continuum">
+<meta name="twitter:description" content="Design. Code. Launch. In continuous flow.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #05050A;
-    --indigo: #0F0A1F;
-    --violet: #1A0B2E;
     --gold: #E8C47C;
     --gold-soft: #F5D78E;
     --text: #F0EEF6;
@@ -21,7 +25,6 @@
     --glass-border: rgba(255, 255, 255, 0.08);
     --glow: 0 0 40px rgba(232, 196, 124, 0.15);
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
@@ -31,24 +34,28 @@
     line-height: 1.6;
     overflow-x: hidden;
   }
-
-  /* Canvas atmosphere */
   #atmosphere {
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
   }
-
-  /* Layout */
+  #progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+    width: 0%;
+    z-index: 100;
+    transition: width 0.1s linear;
+  }
   .container {
     width: min(1100px, 92vw);
     margin: 0 auto;
     position: relative;
     z-index: 1;
   }
-
-  /* Hero */
   .hero {
     min-height: 100vh;
     display: flex;
@@ -57,9 +64,7 @@
     align-items: center;
     text-align: center;
     padding: 6rem 0 4rem;
-    position: relative;
   }
-
   .hero h1 {
     font-family: 'Syne', sans-serif;
     font-size: clamp(3.5rem, 10vw, 6.5rem);
@@ -71,15 +76,11 @@
     background-clip: text;
     margin-bottom: 0.6rem;
   }
-
   .hero .tagline {
     font-size: clamp(1.25rem, 3vw, 1.75rem);
     font-weight: 500;
-    color: var(--text);
     margin-bottom: 1.25rem;
-    letter-spacing: 0.02em;
   }
-
   .hero .subhead {
     max-width: 580px;
     font-size: 1.125rem;
@@ -87,14 +88,12 @@
     margin: 0 auto 2.75rem;
     font-weight: 300;
   }
-
   .cta-group {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
   }
-
   .btn {
     display: inline-flex;
     align-items: center;
@@ -105,10 +104,9 @@
     font-weight: 500;
     text-decoration: none;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    cursor: pointer;
     border: none;
+    cursor: pointer;
   }
-
   .btn-primary {
     background: linear-gradient(135deg, var(--gold), #D4A84B);
     color: #1A1205;
@@ -118,7 +116,6 @@
     transform: translateY(-2px) scale(1.03);
     box-shadow: 0 0 0 1px rgba(255,255,255,0.2), 0 0 60px rgba(232, 196, 124, 0.35);
   }
-
   .btn-secondary {
     background: var(--glass);
     color: var(--text);
@@ -129,13 +126,7 @@
     background: rgba(255,255,255,0.08);
     border-color: rgba(255,255,255,0.15);
   }
-
-  /* Sections */
-  section {
-    padding: 7rem 0;
-    position: relative;
-  }
-
+  section { padding: 7rem 0; }
   .section-label {
     font-size: 0.8rem;
     text-transform: uppercase;
@@ -144,7 +135,6 @@
     margin-bottom: 1rem;
     font-weight: 500;
   }
-
   h2 {
     font-family: 'Syne', sans-serif;
     font-size: clamp(2rem, 5vw, 2.75rem);
@@ -152,29 +142,25 @@
     letter-spacing: -0.02em;
     margin-bottom: 1.5rem;
   }
-
   .lead {
     font-size: 1.2rem;
     color: var(--text-muted);
     max-width: 640px;
     font-weight: 300;
   }
-
-  /* Glass card */
   .glass {
     background: var(--glass);
     border: 1px solid var(--glass-border);
     border-radius: 1.25rem;
     backdrop-filter: blur(20px);
     padding: 2rem;
-    transition: all 0.4s ease;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .glass:hover {
-    border-color: rgba(232, 196, 124, 0.25);
-    box-shadow: 0 0 40px rgba(232, 196, 124, 0.08);
+    border-color: rgba(232, 196, 124, 0.35);
+    box-shadow: 0 0 50px rgba(232, 196, 124, 0.12);
+    transform: translateY(-6px);
   }
-
-  /* Capabilities */
   .capabilities {
     display: grid;
     gap: 1.25rem;
@@ -186,7 +172,6 @@
   @media (min-width: 1000px) {
     .capabilities { grid-template-columns: repeat(3, 1fr); }
   }
-
   .cap-card h3 {
     font-family: 'Syne', sans-serif;
     font-size: 1.15rem;
@@ -198,8 +183,6 @@
     color: var(--text-muted);
     font-weight: 300;
   }
-
-  /* Flow */
   .flow-steps {
     display: flex;
     flex-wrap: wrap;
@@ -215,8 +198,6 @@
     font-size: 0.9rem;
     color: var(--text-muted);
   }
-
-  /* For whom */
   .audience {
     display: grid;
     gap: 1rem;
@@ -230,22 +211,44 @@
     border-left: 2px solid var(--gold);
     background: linear-gradient(90deg, rgba(232,196,124,0.06), transparent);
   }
-
-  /* Final CTA */
   .final-cta {
     text-align: center;
-    padding: 8rem 0;
-  }
-  .final-cta h2 {
-    margin-bottom: 1rem;
+    padding: 6rem 0 8rem;
   }
   .final-cta p {
     color: var(--text-muted);
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     font-size: 1.15rem;
   }
-
-  /* Footer */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 400px;
+    margin: 0 auto 1.5rem;
+  }
+  .form-group input {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    padding: 0.9rem 1.5rem;
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .form-group input:focus {
+    border-color: var(--gold);
+  }
+  .form-group input::placeholder {
+    color: var(--text-muted);
+  }
+  .form-success {
+    display: none;
+    color: var(--gold-soft);
+    font-size: 1.1rem;
+    margin-top: 1rem;
+  }
   footer {
     padding: 3rem 0 4rem;
     text-align: center;
@@ -253,8 +256,6 @@
     color: var(--text-muted);
     font-size: 0.9rem;
   }
-
-  /* Reveal animation */
   .reveal {
     opacity: 0;
     transform: translateY(30px);
@@ -264,24 +265,18 @@
     opacity: 1;
     transform: translateY(0);
   }
-
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .reveal {
-      opacity: 1;
-      transform: none;
-      transition: none;
-    }
-    .btn-primary:hover {
-      transform: none;
-    }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .btn-primary:hover, .glass:hover { transform: none; }
+    #progress { display: none; }
   }
 </style>
 </head>
 <body>
+  <div id="progress"></div>
   <canvas id="atmosphere"></canvas>
 
-  <!-- HERO -->
   <header class="hero">
     <div class="container">
       <h1>Aether</h1>
@@ -294,7 +289,6 @@
     </div>
   </header>
 
-  <!-- THE CONTINUUM -->
   <section>
     <div class="container reveal">
       <div class="section-label">The Continuum</div>
@@ -303,7 +297,6 @@
     </div>
   </section>
 
-  <!-- CAPABILITIES -->
   <section>
     <div class="container">
       <div class="section-label reveal">Capabilities</div>
@@ -337,7 +330,6 @@
     </div>
   </section>
 
-  <!-- FLOW -->
   <section>
     <div class="container reveal">
       <div class="section-label">How it feels</div>
@@ -356,7 +348,6 @@
     </div>
   </section>
 
-  <!-- FOR WHOM -->
   <section>
     <div class="container">
       <div class="section-label reveal">Built for</div>
@@ -370,12 +361,16 @@
     </div>
   </section>
 
-  <!-- FINAL CTA -->
   <section class="final-cta" id="early-access">
     <div class="container reveal">
       <h2>The Continuum is opening</h2>
       <p>Request early access and help shape how the next generation of websites will be born.</p>
-      <a href="#" class="btn btn-primary">Join the Continuum</a>
+      <form id="access-form" class="form-group">
+        <input type="text" name="name" placeholder="Your name" required>
+        <input type="email" name="email" placeholder="Email address" required>
+        <button type="submit" class="btn btn-primary">Join the Continuum</button>
+      </form>
+      <div id="form-success" class="form-success">Welcome to the Continuum. We’ll be in touch soon.</div>
     </div>
   </section>
 
@@ -387,13 +382,12 @@
   </footer>
 
   <script>
-    // Particle atmosphere with light mouse interaction + reduced-motion support
     const canvas = document.getElementById('atmosphere');
     const ctx = canvas.getContext('2d');
     let particles = [];
     let w, h;
     let mouse = { x: null, y: null };
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function resize() {
       w = canvas.width = window.innerWidth;
@@ -402,35 +396,35 @@
     window.addEventListener('resize', resize);
     resize();
 
-    window.addEventListener('mousemove', (e) => {
+    window.addEventListener('mousemove', e => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
     });
 
     class Particle {
-      constructor() {
-        this.reset();
-      }
+      constructor() { this.reset(); }
       reset() {
         this.x = Math.random() * w;
         this.y = Math.random() * h;
-        this.vx = (Math.random() - 0.5) * 0.3;
-        this.vy = (Math.random() - 0.5) * 0.3;
+        this.vx = (Math.random() - 0.5) * 0.25;
+        this.vy = (Math.random() - 0.5) * 0.25;
         this.size = Math.random() * 1.8 + 0.4;
-        this.alpha = Math.random() * 0.4 + 0.1;
+        this.alpha = Math.random() * 0.45 + 0.1;
       }
       update() {
-        if (!prefersReducedMotion && mouse.x !== null) {
+        if (!prefersReduced && mouse.x !== null) {
           const dx = mouse.x - this.x;
           const dy = mouse.y - this.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 180) {
-            this.vx += dx * 0.00003;
-            this.vy += dy * 0.00003;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 220) {
+            this.vx += dx * 0.00004;
+            this.vy += dy * 0.00004;
           }
         }
         this.x += this.vx;
         this.y += this.vy;
+        this.vx *= 0.985;
+        this.vy *= 0.985;
         if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset();
       }
       draw() {
@@ -441,31 +435,37 @@
       }
     }
 
-    for (let i = 0; i < 90; i++) particles.push(new Particle());
+    for (let i = 0; i < 100; i++) particles.push(new Particle());
 
     function animate() {
+      if (prefersReduced) return;
       ctx.clearRect(0, 0, w, h);
-      // soft radial gradients
       const g1 = ctx.createRadialGradient(w*0.2, h*0.3, 0, w*0.2, h*0.3, w*0.6);
       g1.addColorStop(0, 'rgba(26, 11, 46, 0.4)');
       g1.addColorStop(1, 'transparent');
       ctx.fillStyle = g1;
       ctx.fillRect(0, 0, w, h);
-
       const g2 = ctx.createRadialGradient(w*0.8, h*0.7, 0, w*0.8, h*0.7, w*0.5);
       g2.addColorStop(0, 'rgba(15, 10, 31, 0.5)');
       g2.addColorStop(1, 'transparent');
       ctx.fillStyle = g2;
       ctx.fillRect(0, 0, w, h);
-
       particles.forEach(p => { p.update(); p.draw(); });
       requestAnimationFrame(animate);
     }
-    animate();
+    if (!prefersReduced) animate();
 
-    // Reveal on scroll
+    // Scroll progress
+    const progress = document.getElementById('progress');
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      progress.style.width = pct + '%';
+    });
+
+    // Reveal
     const reveals = document.querySelectorAll('.reveal');
-    if (!prefersReducedMotion) {
+    if (!prefersReduced) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) entry.target.classList.add('visible');
@@ -475,6 +475,16 @@
     } else {
       reveals.forEach(el => el.classList.add('visible'));
     }
+
+    // Form
+    const form = document.getElementById('access-form');
+    const success = document.getElementById('form-success');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      form.style.display = 'none';
+      success.style.display = 'block';
+      // Ready for Formspree / backend later
+    });
   </script>
 </body>
 </html>
